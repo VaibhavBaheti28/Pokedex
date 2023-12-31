@@ -16,6 +16,25 @@ import psychic from "../assets/types/psychic.svg";
 import rock from "../assets/types/rock.svg";
 import steel from "../assets/types/steel.svg";
 import water from "../assets/types/water.svg";
+export type PokemonType =
+  | "bug"
+  | "dark"
+  | "dragon"
+  | "electric"
+  | "fairy"
+  | "fighting"
+  | "fire"
+  | "flying"
+  | "ghost"
+  | "grass"
+  | "ground"
+  | "ice"
+  | "normal"
+  | "poison"
+  | "psychic"
+  | "rock"
+  | "steel"
+  | "water";
 
 const Bug = "bug";
 const Dark = "dark";

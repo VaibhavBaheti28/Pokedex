@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Wrapper from "../sections/Wrapper";
 import { useParams } from "react-router-dom";
-import { defaultImages, images } from "../utils";
 import { extractColors } from "extract-colors";
 import axios from "axios";
 import Evolution from "./Pokemon/Evolution";
@@ -113,7 +112,9 @@ function Pokemon() {
           id: data.id,
           name: data.name,
           types: data.types.map(({ type: { name } }) => name),
-          image,
+          image:
+            data.sprites.other.dream_world.front_shiny ||
+            data.sprites.other.dream_world.front_default,
           stats,
           encounters,
           evolutionLevel,
@@ -127,29 +128,28 @@ function Pokemon() {
   );
 
   useEffect(() => {
-    const imageElemet = document.createElement("img");
-    imageElemet.src = images[params.id];
-    const options = {
-      pixels: 10000,
-      distance: 1,
-      splitPower: 10,
-      colorValidator: (red, green, blue, alpha = 255) => alpha > 250,
-      saturationDistance: 0.2,
-      lightnessDistance: 0.2,
-      hueDistance: 0.083333333,
-    };
-    const getColor = async () => {
-      const color = await extractColors(imageElemet.src, options);
-      const root = document.documentElement;
-      root.style.setProperty("--accent-color", color[0].hex.split('"')[0]);
-    };
-    getColor();
-    let image = images[params.id];
-    if (!image) {
-      image = defaultImages[params.id];
-    }
-
-    getPokemonInfo(image);
+    // const imageElemet = document.createElement("img");
+    // imageElemet.src = images[params.id];
+    // const options = {
+    //   pixels: 10000,
+    //   distance: 1,
+    //   splitPower: 10,
+    //   colorValidator: (red, green, blue, alpha = 255) => alpha > 250,
+    //   saturationDistance: 0.2,
+    //   lightnessDistance: 0.2,
+    //   hueDistance: 0.083333333,
+    // };
+    // const getColor = async () => {
+    //   const color = await extractColors(imageElemet.src, options);
+    //   const root = document.documentElement;
+    //   root.style.setProperty("--accent-color", color[0].hex.split('"')[0]);
+    // };
+    // getColor();
+    // let image = images[params.id];
+    // if (!image) {
+    //   image = defaultImages[params.id];
+    // }
+    getPokemonInfo();
   }, [params.id, getPokemonInfo]);
 
   return (
