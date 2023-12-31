@@ -1,5 +1,4 @@
 import Wrapper from "../sections/Wrapper";
-import { debounce } from "../utils";
 import Loader from "../components/Loader";
 import {
   usePokemonQueryByUrl,
@@ -10,7 +9,9 @@ import usePokemonList from "../app/reducers/usePokemonList";
 import { useEffect, useState } from "react";
 
 export const Search = () => {
-  const handleChange = debounce((value: string) => getPokemon(value), 300);
+  const handleChange = (value: string) => {
+    getPokemon(value);
+  };
   const { data: allPokemon } = usePokemonList();
   const { data: randomPokemons, isLoading } = useRandomPokemonQuery();
   const [filteredPokemon, setFilteredPokemon] = useState<
@@ -23,17 +24,18 @@ export const Search = () => {
 
   const { data: searchedPokemon } = usePokemonQueryByUrl(filteredPokemon);
 
-  const getPokemon = async (value: string) => {
+  const getPokemon = (value: string) => {
     if (value.length > 0) {
       const pokemons = allPokemon
         .filter((pokemon: any) => pokemon.name.startsWith(value.toLowerCase()))
         .slice(0, 10);
+      console.log(pokemons);
       setFilteredPokemon(pokemons);
     }
   };
   useEffect(() => {
     setDisplayPokemons(searchedPokemon || randomPokemons);
-  }, [searchedPokemon, randomPokemons]);
+  }, [searchedPokemon, randomPokemons, filteredPokemon]);
   return (
     <>
       {isLoading ? (

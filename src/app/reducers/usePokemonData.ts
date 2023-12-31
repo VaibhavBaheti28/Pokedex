@@ -25,7 +25,6 @@ const getPokemonData = async (pokemonId: number) => {
   const image =
     data.sprites.other.dream_world.front_shiny ||
     data.sprites.other.dream_world.front_default;
-  console.log(data.name);
   if (data.name)
     return {
       name: data.name,
@@ -44,7 +43,6 @@ const getPokemonDataByUrl = async (pokemon: { url: string }) => {
       [name]: pokemonTypes[name],
     })
   );
-
   const image =
     data.sprites.other.dream_world.front_shiny ||
     data.sprites.other.dream_world.front_default ||
@@ -70,7 +68,7 @@ export const usePokemonQuery = (pokemonIds: number[]) => {
 };
 
 export const usePokemonQueryByUrl = (pokemons: { url: string }[]) => {
-  return useQuery("pokemonDataByUrl", async () => {
+  return useQuery(["pokemonDataByUrl", pokemons], async () => {
     const promises = pokemons.map((pokemon: { url: string }) =>
       getPokemonDataByUrl(pokemon)
     );
@@ -97,21 +95,17 @@ export const useRandomPokemonQuery: () => UseQueryResult<
         return randomNumbers;
       };
 
-      const pokemonIds = generateRandomNumbers(100, 1302);
+      const pokemonIds = generateRandomNumbers(80, 1302);
       try {
         const promises = pokemonIds.map((pokemonId: number) =>
           getPokemonData(pokemonId)
         );
 
-        const chunkedArrays = chunkArray(promises, 10);
-        console.log(chunkedArrays);
-
-        const firstResolvedResults = await Promise.all(
-          chunkedArrays.map(async (chunk) => {
-            return await Promise.race(chunk);
-          })
-        );
-        console.log(firstResolvedResults);
+        const chunkedArrays = chunkArray(promises, 8);
+        const promiseChunks = chunkedArrays.map((chunk) => {
+          return Promise.race(chunk);
+        });
+        const firstResolvedResults = await Promise.all(promiseChunks);
 
         if (firstResolvedResults !== null) {
           return firstResolvedResults;
