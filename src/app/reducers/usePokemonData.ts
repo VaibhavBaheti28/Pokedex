@@ -1,9 +1,17 @@
-import { useQuery } from "react-query";
+import { UseQueryResult, useQuery } from "react-query";
 import axios from "axios";
 import { pokemonTypes } from "../../utils";
 import { pokemonRoute } from "../../utils/constants";
 import { PokemonType } from "../../utils/pokemonTypes";
 import { userPokemonsType } from "../../utils/types";
+
+function chunkArray(array: any, chunkSize: number) {
+  const result = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    result.push(array.slice(i, i + chunkSize));
+  }
+  return result;
+}
 
 const getPokemonData = async (pokemonId: number) => {
   const { data } = await axios.get(`${pokemonRoute}/${pokemonId}`);
@@ -17,13 +25,15 @@ const getPokemonData = async (pokemonId: number) => {
   const image =
     data.sprites.other.dream_world.front_shiny ||
     data.sprites.other.dream_world.front_default;
-
-  return {
-    name: data.name,
-    id: data.id,
-    image,
-    types,
-  };
+  console.log(data.name);
+  if (data.name)
+    return {
+      name: data.name,
+      id: data.id,
+      image: image,
+      types,
+    };
+  return null;
 };
 
 const getPokemonDataByUrl = async (pokemon: { url: string }) => {
@@ -37,7 +47,9 @@ const getPokemonDataByUrl = async (pokemon: { url: string }) => {
 
   const image =
     data.sprites.other.dream_world.front_shiny ||
-    data.sprites.other.dream_world.front_default;
+    data.sprites.other.dream_world.front_default ||
+    data.sprites.front_shiny ||
+    data.sprites.front_default;
 
   return {
     name: data.name,
@@ -47,7 +59,7 @@ const getPokemonDataByUrl = async (pokemon: { url: string }) => {
   };
 };
 
-const usePokemonQuery = (pokemonIds: number[]) => {
+export const usePokemonQuery = (pokemonIds: number[]) => {
   return useQuery("pokemonData", async () => {
     const promises = pokemonIds.map((pokemonId) => getPokemonData(pokemonId));
     const results = await Promise.all(promises);
@@ -57,7 +69,7 @@ const usePokemonQuery = (pokemonIds: number[]) => {
   });
 };
 
-const usePokemonQueryByUrl = (pokemons: { url: string }[]) => {
+export const usePokemonQueryByUrl = (pokemons: { url: string }[]) => {
   return useQuery("pokemonDataByUrl", async () => {
     const promises = pokemons.map((pokemon: { url: string }) =>
       getPokemonDataByUrl(pokemon)
@@ -68,8 +80,9 @@ const usePokemonQueryByUrl = (pokemons: { url: string }[]) => {
     return results.filter((pokemonData) => pokemonData !== null);
   });
 };
-
-export const useRandomPokemonQuery = () => {
+export const useRandomPokemonQuery: () => UseQueryResult<
+  userPokemonsType[]
+> = () => {
   return useQuery(
     "randomPokemonData",
     async () => {
@@ -77,7 +90,6 @@ export const useRandomPokemonQuery = () => {
         const randomNumbers: number[] = [];
         while (randomNumbers.length < count) {
           const randomNumber = Math.floor(Math.random() * max) + 1;
-
           if (!randomNumbers.includes(randomNumber)) {
             randomNumbers.push(randomNumber);
           }
@@ -85,19 +97,34 @@ export const useRandomPokemonQuery = () => {
         return randomNumbers;
       };
 
-      const pokemonIds = generateRandomNumbers(10, 26000);
-      const promises = pokemonIds.map((pokemonId: number) =>
-        getPokemonData(pokemonId)
-      );
-      const results = await Promise.all(promises);
+      const pokemonIds = generateRandomNumbers(100, 1302);
+      try {
+        const promises = pokemonIds.map((pokemonId: number) =>
+          getPokemonData(pokemonId)
+        );
 
-      // Filter out null values (Pokémon without images)
-      return results?.filter((pokemonData) => pokemonData !== undefined);
+        const chunkedArrays = chunkArray(promises, 10);
+        console.log(chunkedArrays);
+
+        const firstResolvedResults = await Promise.all(
+          chunkedArrays.map(async (chunk) => {
+            return await Promise.race(chunk);
+          })
+        );
+        console.log(firstResolvedResults);
+
+        if (firstResolvedResults !== null) {
+          return firstResolvedResults;
+        } else {
+          throw new Error("No valid Pokémon data");
+        }
+      } catch (error) {
+        console.error("Error fetching random Pokémon data:", error);
+        throw error;
+      }
     },
     {
       refetchInterval: 10000, // 10 seconds in milliseconds
     }
   );
 };
-
-export default usePokemonQuery;
