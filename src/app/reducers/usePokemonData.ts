@@ -24,15 +24,15 @@ const getPokemonData = async (pokemonId: number) => {
 
   const image =
     data.sprites.other.dream_world.front_shiny ||
-    data.sprites.other.dream_world.front_default;
-  if (data.name)
-    return {
-      name: data.name,
-      id: data.id,
-      image: image,
-      types,
-    };
-  return null;
+    data.sprites.other.dream_world.front_default ||
+    data.sprites.front_shiny ||
+    data.sprites.front_default;
+  return {
+    name: data.name,
+    id: data.id,
+    image: image,
+    types,
+  };
 };
 
 const getPokemonDataByUrl = async (pokemon: { url: string }) => {
