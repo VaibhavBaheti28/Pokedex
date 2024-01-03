@@ -5,7 +5,11 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 function About() {
   return (
     <div className="profile">
-      <img src="/assets/pikachu.png" alt="pikachu" className="profile-image" />
+      <img
+        src="/src/assets/pikachu.png"
+        alt="pikachu"
+        className="profile-image"
+      />
       <h1 className="profile-text">Hi I am Vaibhav Baheti</h1>
       <h2 className="profile-text">The creator of this awesome pokedex</h2>
 
