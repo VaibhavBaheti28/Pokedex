@@ -29,7 +29,6 @@ export const Search = () => {
       const pokemons = allPokemon
         .filter((pokemon: any) => pokemon.name.startsWith(value.toLowerCase()))
         .slice(0, 10);
-      console.log(pokemons);
       setFilteredPokemon(pokemons);
     }
   };

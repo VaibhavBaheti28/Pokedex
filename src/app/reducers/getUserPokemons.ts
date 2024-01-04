@@ -33,7 +33,6 @@ export const getUserPokemons = createAsyncThunk(
           }
         }
 
-        console.log(userPokemons);
         return userPokemons;
       }
 

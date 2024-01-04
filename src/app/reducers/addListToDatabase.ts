@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setToast } from "../slices/AppSlice";
 import { RootState } from "../store";
-import { updateDoc, doc, addDoc, getDoc } from "firebase/firestore";
+import { updateDoc, doc, query, where, getDocs } from "firebase/firestore";
 import { pokemonListRef } from "../../utils/firebaseConfig";
 
 export const addListToDatabase = createAsyncThunk(
@@ -13,30 +13,24 @@ export const addListToDatabase = createAsyncThunk(
         pokemon: { userPokemons },
       } = getState() as RootState;
 
-      if (!userInfo?.email) {
-        return dispatch(
-          setToast("Please login in order to add pokemon to your collection.")
-        );
-      }
+      const firestoreQuery = query(
+        pokemonListRef,
+        where("email", "==", userInfo?.email)
+      );
 
-      const userDocRef = doc(pokemonListRef, userInfo.email);
+      const fetchedPokemons = await getDocs(firestoreQuery);
 
-      const docSnap = await getDoc(userDocRef);
+      if (fetchedPokemons.docs.length) {
+        for (const pokemonDoc of fetchedPokemons.docs) {
+          const docRef = doc(pokemonListRef, pokemonDoc.id);
 
-      if (userPokemons.length > 0) {
-        console.log(docSnap.id, userDocRef);
-        if (docSnap.id) {
-          await updateDoc(userDocRef, {
+          // Update the document with the new userPokemons data
+          await updateDoc(docRef, {
             pokemon: userPokemons,
           });
-        } else {
-          await addDoc(pokemonListRef, {
-            pokemon: userPokemons,
-            email: userInfo.email,
-          });
+          dispatch(setToast(`Pokemons updated in your collection.`));
         }
       }
-      dispatch(setToast(`Pokemons updated in your collection.`));
     } catch (err) {
       console.error({ err });
     }

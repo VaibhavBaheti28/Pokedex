@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Wrapper from "../sections/Wrapper";
 import { useParams } from "react-router-dom";
-import { extractColors } from "extract-colors";
 import axios from "axios";
 import Evolution from "./Pokemon/Evolution";
 import Locations from "./Pokemon/Locations";

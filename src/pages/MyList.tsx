@@ -6,7 +6,6 @@ import PokemonCardGrid from "../components/PokemonCardGrid";
 function MyList() {
   const { userInfo } = useAppSelector(({ app }) => app);
   const { userPokemons } = useAppSelector(({ pokemon }) => pokemon);
-  console.log(userPokemons);
   return (
     <div className="list">
       {userInfo ? <PokemonCardGrid pokemons={userPokemons} /> : <Login />}

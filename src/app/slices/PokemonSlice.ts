@@ -51,7 +51,6 @@ export const PokemonSlice = createSlice({
       if (index === -1) {
         state.userPokemons.push(action.payload);
       }
-      console.log(state.userPokemons);
     },
     removeFromUserPokemonList: (state, action) => {
       const index = state.userPokemons.findIndex(
