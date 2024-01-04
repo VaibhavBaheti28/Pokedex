@@ -1,12 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getInitialPokemonData } from "../reducers/getInitialPokemonData";
-import { getPokemonsData } from "../reducers/getPokemonsData";
+
 import { getUserPokemons } from "../reducers/getUserPokemons";
-import { removePokemonFromUserList } from "../reducers/removePokemonFromUserList";
 import {
   PokemonInitialStateType,
   generatedPokemonType,
 } from "../../utils/types";
+import addListToDatabase from "../reducers/addListToDatabase";
 
 const initialState: PokemonInitialStateType = {
   allPokemon: undefined,
@@ -45,25 +44,30 @@ export const PokemonSlice = createSlice({
     resetRandomPokemons: (state) => {
       state.randomPokemons = undefined;
     },
+    addToUserPokemonList: (state, action) => {
+      const index = state.userPokemons.findIndex(
+        (pokemon: generatedPokemonType) => pokemon.id === action.payload.id
+      );
+      if (index === -1) {
+        state.userPokemons.push(action.payload);
+      }
+    },
+    removeFromUserPokemonList: (state, action) => {
+      const index = state.userPokemons.findIndex(
+        (pokemon: generatedPokemonType) => pokemon.id === action.payload.id
+      );
+      const queue = [...state.userPokemons];
+      queue.splice(index, 1);
+      state.userPokemons = queue;
+    },
   },
 
   extraReducers: (builder) => {
-    builder.addCase(getInitialPokemonData.fulfilled, (state, action) => {
-      state.allPokemon = action.payload;
-    });
-    builder.addCase(getPokemonsData.fulfilled, (state, action) => {
-      state.randomPokemons = action.payload;
-    });
     builder.addCase(getUserPokemons.fulfilled, (state, action) => {
       state.userPokemons = action.payload!;
     });
-    builder.addCase(removePokemonFromUserList.fulfilled, (state, action) => {
-      const userPokemons = [...state.userPokemons];
-      const index = userPokemons.findIndex(
-        (pokemon) => pokemon.firebaseId === action.payload?.id
-      );
-      userPokemons.splice(index, 1);
-      state.userPokemons = userPokemons;
+    builder.addCase(addListToDatabase.fulfilled, (state, action) => {
+      state.userPokemons = [];
     });
   },
 });
@@ -73,4 +77,6 @@ export const {
   removeFromCompare,
   setCurrentPokemon,
   resetRandomPokemons,
+  addToUserPokemonList,
+  removeFromUserPokemonList,
 } = PokemonSlice.actions;

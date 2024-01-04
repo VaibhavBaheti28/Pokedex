@@ -6,6 +6,7 @@ import { firebaseAuth } from "../utils/firebaseConfig";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setPokemonTab, setToast, setUserStatus } from "../app/slices/AppSlice";
 import { pokemonTabs } from "../utils/constants";
+import { addListToDatabase } from "../app/reducers/addListToDatabase";
 
 export default function Footer() {
   const location = useLocation();
@@ -13,7 +14,8 @@ export default function Footer() {
     ({ app: { currentPokemonTab } }) => currentPokemonTab
   );
   const dispatch = useAppDispatch();
-  const logOutUser = () => {
+  const logOutUser = async () => {
+    await dispatch(addListToDatabase());
     signOut(firebaseAuth);
     dispatch(setUserStatus(undefined));
     dispatch(setToast("Logged out successfully from Firebase"));

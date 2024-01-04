@@ -2,42 +2,53 @@
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { defaultImages, images, pokemonTypes } from "../../utils";
+import { pokemonTypes } from "../../utils";
 import { generatedPokemonType, genericPokemonType } from "../../utils/types";
 
 export const getPokemonsData = createAsyncThunk(
   "pokemon/randomPokemon",
   async (pokemons: genericPokemonType[]) => {
     try {
-      const pokemonsData: generatedPokemonType[] = [];
-      for await (const pokemon of pokemons) {
-        const {
+      const axiosRequests = pokemons.map((pokemon) => axios.get(pokemon.url));
+
+      const responses = await Promise.all(axiosRequests);
+
+      const pokemonsData: generatedPokemonType[] = responses.map(
+        ({
           data,
         }: {
-          data: {
-            id: number;
-            types: { type: genericPokemonType }[];
-          };
-        } = await axios.get(pokemon.url);
-        const types = data.types.map(
-          ({ type: { name } }: { type: { name: string } }) => ({
-            [name]: pokemonTypes[name],
-          })
-        );
-        let image: string = images[data.id];
-        if (!image) {
-          image = defaultImages[data.id];
+          data: { id: number; types: { type: genericPokemonType }[] };
+        }) => {
+          const types = data.types.map(
+            ({ type: { name } }: { type: { name: string } }) => ({
+              [name]: pokemonTypes[name],
+            })
+          );
+          const image =
+            data.sprites.other.dream_world.front_shiny ||
+            data.sprites.other.dream_world.front_default ||
+            data.sprites.front_shiny ||
+            data.sprites.front_default;
+
+          if (image) {
+            return {
+              name: data.name,
+              id: data.id,
+              image,
+              types,
+            };
+          }
+
+          return null; // or handle the case where image is not available
         }
-        if (image) {
-          pokemonsData.push({
-            name: pokemon.name,
-            id: data.id,
-            image,
-            types,
-          });
-        }
-      }
-      return pokemonsData;
+      );
+
+      // Filter out null values (Pokémon without images)
+      const filteredPokemonsData = pokemonsData.filter(
+        (pokemonData) => pokemonData !== null
+      );
+
+      return filteredPokemonsData;
     } catch (err) {
       console.error(err);
     }

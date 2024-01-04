@@ -1,9 +1,12 @@
 import React from "react";
 import { IoGitCompare } from "react-icons/io5";
 import { FaTrash, FaPlus } from "react-icons/fa";
-import { addToCompare, setCurrentPokemon } from "../app/slices/PokemonSlice";
+import {
+  addToCompare,
+  removeFromUserPokemonList,
+  setCurrentPokemon,
+} from "../app/slices/PokemonSlice";
 import { useAppDispatch } from "../app/hooks";
-import { removePokemonFromUserList } from "../app/reducers/removePokemonFromUserList";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setPokemonTab, setToast } from "../app/slices/AppSlice";
 import { addPokemonToList } from "../app/reducers/addPokemonToList";
@@ -36,9 +39,7 @@ function PokemonCardGrid({ pokemons }: { pokemons: userPokemonsType[] }) {
                     <FaTrash
                       className="trash"
                       onClick={async () => {
-                        await dispatch(
-                          removePokemonFromUserList({ id: data.firebaseId! })
-                        );
+                        await dispatch(removeFromUserPokemonList(data));
                         dispatch(setToast("Pokemon Removed Successfully."));
                       }}
                     />

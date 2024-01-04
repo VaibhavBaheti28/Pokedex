@@ -17,6 +17,17 @@ const firebaseConfig = {
 
   measurementId: "G-DKK5V9BLSH",
 };
+
+// const firebaseConfig = {
+//   apiKey: "AIzaSyDNkwUXJFMOOYjNpnTkrCo1Y9nCeTpFC04",
+//   authDomain: "pokedex-fe543.firebaseapp.com",
+//   projectId: "pokedex-fe543",
+//   storageBucket: "pokedex-fe543.appspot.com",
+//   messagingSenderId: "948503681986",
+//   appId: "1:948503681986:web:79250d83d60f75960a545b",
+//   measurementId: "G-4Z4DWLHXGS",
+// };
+
 //
 const app = initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth(app);

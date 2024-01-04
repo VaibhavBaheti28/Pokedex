@@ -1,68 +1,40 @@
-// @ts-nocheck
-
-import React, { useEffect } from "react";
 import Wrapper from "../sections/Wrapper";
-import { debounce } from "../utils";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { getInitialPokemonData } from "../app/reducers/getInitialPokemonData";
-import { getPokemonsData } from "../app/reducers/getPokemonsData";
 import Loader from "../components/Loader";
-import { setLoading } from "../app/slices/AppSlice";
-import { Pagination } from "@mui/material";
+import {
+  usePokemonQueryByUrl,
+  useRandomPokemonQuery,
+} from "../app/reducers/usePokemonData";
 import PokemonCardGrid from "../components/PokemonCardGrid";
+import usePokemonList from "../app/reducers/usePokemonList";
+import { useEffect, useState } from "react";
 
-function Search() {
-  const handleChange = debounce((value: string) => getPokemon(value), 300);
-  const isLoading = useAppSelector(({ app: { isLoading } }) => isLoading);
-  const [page, setPage] = useState<number>(1);
-  const dispatch = useAppDispatch();
-  const { allPokemon, randomPokemons } = useAppSelector(
-    ({ pokemon }) => pokemon
-  );
+export const Search = () => {
+  const handleChange = (value: string) => {
+    getPokemon(value);
+  };
+  const { data: allPokemon } = usePokemonList();
+  const { data: randomPokemons, isLoading } = useRandomPokemonQuery();
+  const [filteredPokemon, setFilteredPokemon] = useState<
+    {
+      name?: "";
+      url: string;
+    }[]
+  >([{ url: "" }]);
+  const [displayPokemons, setDisplayPokemons] = useState(randomPokemons);
 
-  useEffect(() => {
-    dispatch(getInitialPokemonData());
-  }, [dispatch]);
+  const { data: searchedPokemon } = usePokemonQueryByUrl(filteredPokemon);
 
-  useEffect(() => {
-    if (allPokemon) {
-      const clonedPokemons = [...allPokemon];
-      const randomPokemonsId = clonedPokemons
-        .sort(() => Math.random() - Math.random())
-        .slice(0, 20);
-      dispatch(getPokemonsData(randomPokemonsId));
-    }
-  }, [allPokemon, dispatch]);
-
-  useEffect(() => {
-    if (randomPokemons) {
-      dispatch(setLoading(false));
-      console.log("Loaded");
-    }
-  }, [randomPokemons, dispatch]);
-
-  const getPokemon = async (value: string) => {
-    if (value.length) {
-      const pokemons = allPokemon.filter((pokemon) =>
-        pokemon.name.includes(value.toLowerCase())
-      );
-      dispatch(getPokemonsData(pokemons));
-    } else {
-      const clonedPokemons = [...allPokemon];
-      const randomPokemonsId = clonedPokemons
-        .sort(() => Math.random() - Math.random())
-        .slice(0, 20);
-      dispatch(getPokemonsData(randomPokemonsId));
+  const getPokemon = (value: string) => {
+    if (value.length > 0) {
+      const pokemons = allPokemon
+        .filter((pokemon: any) => pokemon.name.startsWith(value.toLowerCase()))
+        .slice(0, 10);
+      setFilteredPokemon(pokemons);
     }
   };
-
-  const handleChangePage = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setPage(value);
-  };
-
+  useEffect(() => {
+    setDisplayPokemons(searchedPokemon || randomPokemons);
+  }, [searchedPokemon, randomPokemons, filteredPokemon]);
   return (
     <>
       {isLoading ? (
@@ -75,20 +47,11 @@ function Search() {
             className="pokemon-searchbar"
             placeholder="Search Pokemon"
           />
-          <Pagination
-            count={1302} // Calculate the number of pages
-            page={page}
-            onChange={handleChangePage}
-            color="secondary"
-            showFirstButton
-            showLastButton
-            boundaryCount={2}
-          />
-          <PokemonCardGrid pokemons={randomPokemons} />
+          {displayPokemons && <PokemonCardGrid pokemons={displayPokemons} />}
         </div>
       )}
     </>
   );
-}
+};
 
 export default Wrapper(Search);
