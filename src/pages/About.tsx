@@ -11,7 +11,7 @@ function About() {
       <h1 className="profile-text">Hi I am Vaibhav Baheti</h1>
       <h2 className="profile-text">
         I optimized this awesome pokedex. Older Site:
-        <a href="https://vaibhavbaheti28.github.io/react-pokedex/pokemon/1">
+        <a href="https://vaibhavbaheti28.github.io/react-pokedex/">
           <ArrowOutwardIcon />
         </a>
       </h2>
