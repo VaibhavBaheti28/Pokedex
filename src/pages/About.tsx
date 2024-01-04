@@ -2,7 +2,7 @@ import React from "react";
 import Wrapper from "../sections/Wrapper";
 import avatarImage from "../assets/me.jpg";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-
+import LaunchRoundedIcon from "@mui/icons-material/LaunchRounded";
 function About() {
   return (
     <div className="profile">
@@ -17,6 +17,9 @@ function About() {
 
         <a href="https://www.linkedin.com/in/vaibhav-baheti-5027412a7/">
           <FaLinkedin />
+        </a>
+        <a href="https://vaibhavbaheti28.github.io/gambit/">
+          <LaunchRoundedIcon />
         </a>
       </div>
     </div>
