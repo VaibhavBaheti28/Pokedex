@@ -51,7 +51,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <div className="main-container">
         <Background />
-        <BrowserRouter>
+        <BrowserRouter basename="/Pokedex">
           <Suspense fallback={<Loader />}>
             <div className="app">
               <Navbar />
