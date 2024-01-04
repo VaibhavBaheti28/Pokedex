@@ -1,17 +1,14 @@
 import React from "react";
 import Wrapper from "../sections/Wrapper";
+import avatarImage from "../assets/me.jpg";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 function About() {
   return (
     <div className="profile">
-      <img
-        src="/src/assets/pikachu.png"
-        alt="pikachu"
-        className="profile-image"
-      />
+      <img src={avatarImage} alt="ME" className="profile-image" />
       <h1 className="profile-text">Hi I am Vaibhav Baheti</h1>
-      <h2 className="profile-text">The creator of this awesome pokedex</h2>
+      <h2 className="profile-text">I optimized this awesome pokedex</h2>
 
       <div className="profile-links">
         <a href="https://github.com/VaibhavBaheti28?tab=repositories">
