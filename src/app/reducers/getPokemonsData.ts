@@ -25,6 +25,8 @@ export const getPokemonsData = createAsyncThunk(
             })
           );
           const image =
+            data.sprites.other.home.front_default ||
+            data.sprites.other.home.front_shiny ||
             data.sprites.other.dream_world.front_shiny ||
             data.sprites.other.dream_world.front_default ||
             data.sprites.front_shiny ||
