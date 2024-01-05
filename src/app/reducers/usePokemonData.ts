@@ -23,6 +23,8 @@ const getPokemonData = async (pokemonId: number) => {
   );
 
   const image =
+    data.sprites.other.home.front_default ||
+    data.sprites.other.home.front_shiny ||
     data.sprites.other.dream_world.front_shiny ||
     data.sprites.other.dream_world.front_default ||
     data.sprites.front_shiny ||
@@ -44,8 +46,8 @@ const getPokemonDataByUrl = async (pokemon: { url: string }) => {
     })
   );
   const image =
-    data.sprites.other.dream_world.front_shiny ||
-    data.sprites.other.dream_world.front_default ||
+    data.sprites.other.home.front_default ||
+    data.sprites.other.home.front_default ||
     data.sprites.front_shiny ||
     data.sprites.front_default;
 

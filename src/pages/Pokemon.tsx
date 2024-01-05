@@ -112,8 +112,12 @@ function Pokemon() {
           name: data.name,
           types: data.types.map(({ type: { name } }) => name),
           image:
+            data.sprites.other.home.front_default ||
+            data.sprites.other.home.front_shiny ||
             data.sprites.other.dream_world.front_shiny ||
-            data.sprites.other.dream_world.front_default,
+            data.sprites.other.dream_world.front_default ||
+            data.sprites.front_shiny ||
+            data.sprites.front_default,
           stats,
           encounters,
           evolutionLevel,
