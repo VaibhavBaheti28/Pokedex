@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/Pokedex/static/css/main.ffcf7480.css",
-    "main.js": "/Pokedex/static/js/main.2b7e857e.js",
-    "static/js/825.1423702b.chunk.js": "/Pokedex/static/js/825.1423702b.chunk.js",
+    "main.js": "/Pokedex/static/js/main.f77632c5.js",
+    "static/js/825.9d209647.chunk.js": "/Pokedex/static/js/825.9d209647.chunk.js",
     "static/js/82.e341e662.chunk.js": "/Pokedex/static/js/82.e341e662.chunk.js",
     "static/js/521.c69f7c43.chunk.js": "/Pokedex/static/js/521.c69f7c43.chunk.js",
     "static/js/305.7230e0ef.chunk.js": "/Pokedex/static/js/305.7230e0ef.chunk.js",
-    "static/js/411.4fd64457.chunk.js": "/Pokedex/static/js/411.4fd64457.chunk.js",
+    "static/js/411.fef1eec0.chunk.js": "/Pokedex/static/js/411.fef1eec0.chunk.js",
     "static/js/355.64f6e8cc.chunk.js": "/Pokedex/static/js/355.64f6e8cc.chunk.js",
     "static/js/71.1c4e59f9.chunk.js": "/Pokedex/static/js/71.1c4e59f9.chunk.js",
     "static/js/294.1cc59570.chunk.js": "/Pokedex/static/js/294.1cc59570.chunk.js",
@@ -38,12 +38,12 @@
     "index.html": "/Pokedex/index.html",
     "static/media/electric.svg": "/Pokedex/static/media/electric.2fbb1c92defa3b834741726788f7ea14.svg",
     "main.ffcf7480.css.map": "/Pokedex/static/css/main.ffcf7480.css.map",
-    "main.2b7e857e.js.map": "/Pokedex/static/js/main.2b7e857e.js.map",
-    "825.1423702b.chunk.js.map": "/Pokedex/static/js/825.1423702b.chunk.js.map",
+    "main.f77632c5.js.map": "/Pokedex/static/js/main.f77632c5.js.map",
+    "825.9d209647.chunk.js.map": "/Pokedex/static/js/825.9d209647.chunk.js.map",
     "82.e341e662.chunk.js.map": "/Pokedex/static/js/82.e341e662.chunk.js.map",
     "521.c69f7c43.chunk.js.map": "/Pokedex/static/js/521.c69f7c43.chunk.js.map",
     "305.7230e0ef.chunk.js.map": "/Pokedex/static/js/305.7230e0ef.chunk.js.map",
-    "411.4fd64457.chunk.js.map": "/Pokedex/static/js/411.4fd64457.chunk.js.map",
+    "411.fef1eec0.chunk.js.map": "/Pokedex/static/js/411.fef1eec0.chunk.js.map",
     "355.64f6e8cc.chunk.js.map": "/Pokedex/static/js/355.64f6e8cc.chunk.js.map",
     "71.1c4e59f9.chunk.js.map": "/Pokedex/static/js/71.1c4e59f9.chunk.js.map",
     "294.1cc59570.chunk.js.map": "/Pokedex/static/js/294.1cc59570.chunk.js.map",
@@ -53,6 +53,6 @@
   },
   "entrypoints": [
     "static/css/main.ffcf7480.css",
-    "static/js/main.2b7e857e.js"
+    "static/js/main.f77632c5.js"
   ]
 }
