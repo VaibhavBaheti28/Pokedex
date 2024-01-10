@@ -37,7 +37,7 @@ const getPokemonData = async (pokemonId: number) => {
   };
 };
 
-const getPokemonDataByUrl = async (pokemon: { url: string }) => {
+export const getPokemonDataByUrl = async (pokemon: { url: string }) => {
   const { data } = await axios.get(pokemon.url);
 
   const types = data.types.map(
